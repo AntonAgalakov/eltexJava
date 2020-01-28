@@ -45,6 +45,12 @@ public class Main {
             statement.executeUpdate("INSERT INTO User (id, name, phone) VALUES(" + Alisa.getId() + ", \'"+ Alisa.getName() +"\'," + " \'"+ Alisa.getPhone() +"\');");
             statement.executeUpdate("INSERT INTO Teacher (id, department, interest) VALUES(" + Alisa.getId() + ", \'"+ Alisa.getDepartment() +"\'," + " \'"+ Alisa.getInterests() +"\');");
 
+            System.out.println("I want to display the names from the User database");
+            ResultSet resultSet = statement.executeQuery("SELECT name FROM User");
+            while (resultSet.next())
+                System.out.println(resultSet.getString("name"));
+
+
             connection.close();
 
         } catch (IOException | SQLException e) {
