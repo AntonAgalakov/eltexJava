@@ -1,12 +1,20 @@
 package ru.Eltex;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Properties;
+
 public class Person {
     private String name;
     private int health;
     private int happiness;
     private int hunger;
     private int money;
-    private int days;
+    private int steps;
 
     public void setPerson(String valueName) {
         name = valueName;
@@ -14,14 +22,14 @@ public class Person {
         happiness = 100;
         hunger = 5;
         money = 50;
-        days = 10;
+        steps = 0;
     }
     public void conditionPerson() {
         System.out.println("Health: " + health);
         System.out.println("Happiness: " + happiness);
         System.out.println("Hunger: " + hunger);
         System.out.println("Money: " + money + "$");
-        System.out.println("Days: " + days);
+        System.out.println("Days: " + steps);
     }
     public boolean checkName(String valueName) {
         return !valueName.equals("");
@@ -73,6 +81,9 @@ public class Person {
         else
             happiness = 100;
     }
+    public void addStep() {
+        steps += 1;
+    }
     public boolean checkAlive() {
         if(money < -50) {
             System.out.println("You owe too much money.");
@@ -90,6 +101,27 @@ public class Person {
             return false;
         }
         return true;
+    }
+
+    public void saveInDataBase() {
+        FileInputStream fis;
+        Properties property = new Properties();
+
+        try {
+            fis = new FileInputStream("src/main/resources/config.properties");
+            property.load(fis);
+
+            String host = property.getProperty("db.host");
+            String login = property.getProperty("db.login");
+            String password = property.getProperty("db.password");
+
+            Connection connection = DriverManager.getConnection(host, login, password);
+            Statement statement = connection.createStatement();
+            statement.executeUpdate("INSERT INTO results (name, steps) VALUES(\'" + name + "\', " + steps +");");
+            connection.close();
+        } catch (IOException | SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 }

@@ -34,9 +34,11 @@ public class Game {
                     player.watchNetflix();
                     break;
             }
+            player.addStep();
             player.conditionPerson();
 
         }
-        System.out.println("Your player id dead");
+        player.saveInDataBase();
+        System.out.println("Your player is dead");
     }
 }
